@@ -1,7 +1,7 @@
 {
-  "name": "crud-react-app",
+  "name": "forbex-contact",
   "license": "mit",
-  "description": "Example of React App as a simple CRUD",
+  "description": "App para el manejo de consultas de Forbex",
   "keywords": [
     "react",
     "example"

@@ -284,7 +284,8 @@ export const DataAccess = {
     let contactNumber = 0
     if (!formData.contact_number) {
       FirebaseInfo.lastContactNumber = FirebaseInfo.lastContactNumber ?
-        FirebaseInfo.lastContactNumber + 1 : 1
+        FirebaseInfo.lastContactNumber + 1 :
+        1
       contactNumber = FirebaseInfo.lastContactNumber
     } else {
       contactNumber = formData.contact_number

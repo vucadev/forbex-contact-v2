@@ -22,7 +22,7 @@ export const FirebaseInfo = {
  * @param {Array} data
  * @param {Array} resultMap
  * @param {Array} fieldList
-*/
+ */
 const consolidate = (data, resultMap, fieldList) => {
   // Para cada campo que quiero consolidar...
   fieldList.forEach((fieldItemName) => {
@@ -40,14 +40,14 @@ const consolidate = (data, resultMap, fieldList) => {
 
     // Busco si en el mapa resultante está este campo
     const valueResult = resultMap[fieldItemName].find((resultFieldValue) => {
-      return (resultFieldValue.id == value)
+      return resultFieldValue.id == value
     })
     // Si no fue encontrado, lo agrego con valor == 1
     if (!valueResult) {
       console.log(`!valueResult / ${fieldItemName} / data: `)
       console.log(data)
       console.log(value)
-      resultMap[fieldItemName].push({'id': value, 'quantity': 1})
+      resultMap[fieldItemName].push({ id: value, quantity: 1 })
     } else {
       // Si fue encontrado, se incrementa el valor en 1
       valueResult.quantity++
@@ -284,8 +284,7 @@ export const DataAccess = {
     let contactNumber = 0
     if (!formData.contact_number) {
       FirebaseInfo.lastContactNumber = FirebaseInfo.lastContactNumber ?
-        FirebaseInfo.lastContactNumber + 1 :
-        1
+        FirebaseInfo.lastContactNumber + 1 : 1
       contactNumber = FirebaseInfo.lastContactNumber
     } else {
       contactNumber = formData.contact_number

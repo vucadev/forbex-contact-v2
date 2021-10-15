@@ -10,7 +10,7 @@ import Logo from '../assets/images/forbex-logo-color.svg'
  * @param {Number} count Cantidad total de datos
  * @return {Object} Component for Creating an entity
  */
-export default function NavBar({count}) {
+export default function NavBar({ count }) {
   return (
     <div>
       <Box sx={{ flexGrow: 1, height: '12vh' }}>
@@ -29,11 +29,10 @@ export default function NavBar({count}) {
               <Button variant="contained" component={Link} to="/new">
                 <AddIcon /> Nueva
               </Button>
-              <p className='totalCount'>
-                Total de consultas: {
-                  count != -1 ?
-                    count :
-                    <HourglassEmptyIcon fontSize='small'/>}</p>
+              <p className="totalCount">
+                Total de consultas:{' '}
+                {count != -1 ? count : <HourglassEmptyIcon fontSize="small" />}
+              </p>
             </ButtonGroup>
           </Toolbar>
         </AppBar>

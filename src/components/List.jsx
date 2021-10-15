@@ -8,14 +8,15 @@ import Box from '@mui/material/Box'
 import { Button, Card, Divider } from '@mui/material'
 import DataTable from './DataTable'
 import {
-  countryColumnsDef, channelColumnsDef, salesColumnsDef,
-  referencesColumnsDef, sportsColumnsDef,
+  countryColumnsDef,
+  channelColumnsDef,
+  salesColumnsDef,
+  referencesColumnsDef,
+  sportsColumnsDef,
 } from '../assets/summary-columns-def'
 // import { rowsGrid as mockData } from '../assets/mockData'
 import { DataAccess } from '../commons/dataaccess'
-import {
-  showGlobalError,
-} from '../commons/global-utils'
+import { showGlobalError } from '../commons/global-utils'
 
 /**
  *
@@ -48,37 +49,41 @@ export default function List() {
   const getData = useCallback(() => {
     const fieldList = ['country', 'sport', 'channel', 'sales', 'references']
 
-    DataAccess.getSummary(fieldList).then((docsData) => {
-      console.log('Data from Firebase: ')
-      console.log(docsData)
+    DataAccess.getSummary(fieldList)
+      .then((docsData) => {
+        console.log('Data from Firebase: ')
+        console.log(docsData)
 
-      // setDataList(formData)
-      setCountryRows(docsData.country)
-      setSportsRows(docsData.sport)
-      setChannelRows(docsData.channel)
-      setSalesRows(docsData.sales)
-      setReferencesRows(docsData.references)
-      setShowResults(true)
-    }).catch((error) => {
-      showGlobalError('Error al obtener datos', error)
-    })
+        // setDataList(formData)
+        setCountryRows(docsData.country)
+        setSportsRows(docsData.sport)
+        setChannelRows(docsData.channel)
+        setSalesRows(docsData.sales)
+        setReferencesRows(docsData.references)
+        setShowResults(true)
+      })
+      .catch((error) => {
+        showGlobalError('Error al obtener datos', error)
+      })
   })
 
   const getDetailData = useCallback((fieldName, fieldValue) => {
-    DataAccess.getData().then((docsData) => {
-      console.log('Data from Firebase: ')
-      console.log(docsData)
-      console.log('getData:')
-      const formData = DataAccess.fbData2tableData(docsData)
-      // dispatchData({ type: 'SET_ITEMS', items: formData });
+    DataAccess.getData()
+      .then((docsData) => {
+        console.log('Data from Firebase: ')
+        console.log(docsData)
+        console.log('getData:')
+        const formData = DataAccess.fbData2tableData(docsData)
+        // dispatchData({ type: 'SET_ITEMS', items: formData });
 
-      // setPending(false)
-      console.log(formData)
-      setDataList(formData)
-      setShowResults(true)
-    }).catch((error) => {
-      showGlobalError('Error al obtener datos', error)
-    })
+        // setPending(false)
+        console.log(formData)
+        setDataList(formData)
+        setShowResults(true)
+      })
+      .catch((error) => {
+        showGlobalError('Error al obtener datos', error)
+      })
   })
 
   return (
@@ -112,26 +117,32 @@ export default function List() {
         <Divider />
         {showResults ? (
           <Box sx={{ flexGrow: 1 }}>
-            <div className='summarySection'>
-              <Card sx={{ minWidth: 400 }} >
+            <div className="summarySection">
+              <Card sx={{ minWidth: 400 }}>
                 <DataTable
-                  dataRows={countryRows} dataColumns={countryColumnsDef} />
+                  dataRows={countryRows}
+                  dataColumns={countryColumnsDef}
+                />
               </Card>
-              <Card sx={{ minWidth: 400 }} >
+              <Card sx={{ minWidth: 400 }}>
                 <DataTable
-                  dataRows={sportsRows} dataColumns={sportsColumnsDef} />
+                  dataRows={sportsRows}
+                  dataColumns={sportsColumnsDef}
+                />
               </Card>
-              <Card sx={{ minWidth: 400 }} >
+              <Card sx={{ minWidth: 400 }}>
                 <DataTable
-                  dataRows={channelRows} dataColumns={channelColumnsDef} />
+                  dataRows={channelRows}
+                  dataColumns={channelColumnsDef}
+                />
               </Card>
-              <Card sx={{ minWidth: 400 }} >
-                <DataTable
-                  dataRows={salesRows} dataColumns={salesColumnsDef} />
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable dataRows={salesRows} dataColumns={salesColumnsDef} />
               </Card>
-              <Card sx={{ minWidth: 400 }} >
+              <Card sx={{ minWidth: 400 }}>
                 <DataTable
-                  dataRows={referencesRows} dataColumns={referencesColumnsDef}
+                  dataRows={referencesRows}
+                  dataColumns={referencesColumnsDef}
                 />
               </Card>
             </div>

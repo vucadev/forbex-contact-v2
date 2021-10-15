@@ -6,8 +6,12 @@ import { DataGrid } from '@mui/x-data-grid'
  * @param {Object} dataColumns Columnlist to configure Component
  * @return {Object} Configurable ListData Component
  */
-export default function Data({ dataRows, dataColumns, customPageSize,
-  checkboxSeelectRow }) {
+export default function Data({
+  dataRows,
+  dataColumns,
+  customPageSize,
+  checkboxSeelectRow,
+}) {
   // eslint-disable-next-line no-unused-vars
   const [rows, setRows] = useState(dataRows)
   // eslint-disable-next-line no-unused-vars
@@ -43,7 +47,7 @@ export default function Data({ dataRows, dataColumns, customPageSize,
             columns={dataColumns}
             pageSize={pageSize}
             rowsPerPageOptions={[5, 10, 50]}
-            { ...canSelectRow ? checkboxSelection : null}
+            {...(canSelectRow ? checkboxSelection : null)}
             density={'compact'}
           />
         </div>

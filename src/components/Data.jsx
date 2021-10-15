@@ -60,8 +60,8 @@ export default function Data({ dataRows, dataColumns }) {
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.format && typeof value === 'number' ?
-                            (column.format(value)) :
-                            (value)}
+                            column.format(value) :
+                            value}
                         </TableCell>
                       )
                     })}

@@ -41,16 +41,16 @@ function App() {
 
   return (
     <Router>
-      <div className='App'>
-        <header className='navbar'>
-          <NavBar count={contactsCount}/>
+      <div className="App">
+        <header className="navbar">
+          <NavBar count={contactsCount} />
         </header>
-        <Container className='container'>
+        <Container className="container">
           <Switch>
-            <Route path='/new'>
+            <Route path="/new">
               <New />
             </Route>
-            <Route exact path='/'>
+            <Route exact path="/">
               <List />
             </Route>
           </Switch>

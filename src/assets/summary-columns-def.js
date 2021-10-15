@@ -21,8 +21,7 @@ const actionsFieldDef = {
       variant="contained"
       color="primary"
       size="small"
-      style={{ marginLeft: 16,
-        lineHeight: 1 }}
+      style={{ marginLeft: 16, lineHeight: 1 }}
     >
       Listar
     </Button>
@@ -68,8 +67,8 @@ export const referencesColumnsDef = [
   {
     headerName: 'Referencias',
     field: 'id',
-    valueFormatter: (params) => getLabelFor('references',
-      (params.value.value || params.value)),
+    valueFormatter: (params) =>
+      getLabelFor('references', params.value.value || params.value),
     sortable: true,
     width: dataFieldWidth,
   },
@@ -88,5 +87,3 @@ export const salesColumnsDef = [
   quantityFieldDef,
   actionsFieldDef,
 ]
-
-

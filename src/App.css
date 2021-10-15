@@ -17,10 +17,36 @@ img.App-header-Logo {
   color: white;
 }
 
-.filters {
+.container {
+  width: '100%';
   padding: 5vh 0;
 }
 
 .searchButtonDiv {
   padding: 6vh 12vh;
+}
+
+p.totalCount {
+  padding: 0vh 6vh;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.summarySection {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  align-items: center;
+  vertical-align: baseline;
+  justify-content: center;
+}
+.summarySection > Card {
+  padding: 5% 15%;
+}
+
+.summaryDataTable {
+  flex: 1 1 auto;
+  min-width: 40vw;
+  width: 50vw;
 }

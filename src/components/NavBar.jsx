@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
 import AddIcon from '@mui/icons-material/Add'
 import HomeIcon from '@mui/icons-material/Home'
 import { AppBar, Toolbar, Button, ButtonGroup } from '@mui/material'
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
 import { Box } from '@mui/system'
 import { Link } from 'react-router-dom'
 import Logo from '../assets/images/forbex-logo-color.svg'
 /**
- *
+ * @param {Number} count Cantidad total de datos
  * @return {Object} Component for Creating an entity
  */
-export default function NavBar() {
+export default function NavBar({count}) {
   return (
     <div>
       <Box sx={{ flexGrow: 1, height: '12vh' }}>
@@ -27,6 +29,11 @@ export default function NavBar() {
               <Button variant="contained" component={Link} to="/new">
                 <AddIcon /> Nueva
               </Button>
+              <p className='totalCount'>
+                Total de consultas: {
+                  count != -1 ?
+                    count :
+                    <HourglassEmptyIcon fontSize='small'/>}</p>
             </ButtonGroup>
           </Toolbar>
         </AppBar>

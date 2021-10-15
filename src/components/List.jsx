@@ -1,14 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import DateRangePicker from '@mui/lab/DateRangePicker'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import Box from '@mui/material/Box'
-import { Button, Divider } from '@mui/material'
+import { Button, Card, Divider } from '@mui/material'
 import DataTable from './DataTable'
-import { columnsGrid as mockColumns } from '../assets/columns1'
-import { rowsGrid as mockData } from '../assets/mockData'
+import {
+  countryColumnsDef, channelColumnsDef, salesColumnsDef,
+  referencesColumnsDef, sportsColumnsDef,
+} from '../assets/summary-columns-def'
+// import { rowsGrid as mockData } from '../assets/mockData'
+import { DataAccess } from '../commons/dataaccess'
+import {
+  showGlobalError,
+} from '../commons/global-utils'
 
 /**
  *
@@ -17,21 +24,62 @@ import { rowsGrid as mockData } from '../assets/mockData'
 export default function List() {
   const [dateFilter, setDateFilter] = useState([new Date(), new Date()])
   // [null, null]
-  const [dataList, setDataList] = useState(mockData)
-  const [columns, setColumns] = useState(mockColumns)
+  // const [dataList, setDataList] = useState(mockData)
+  // const [countryColumns, setCountryColumns] = useState(countryColumnsDef)
   const [showResults, setShowResults] = useState(false)
+  const [countryRows, setCountryRows] = useState([])
+  const [sportsRows, setSportsRows] = useState([])
+  const [channelRows, setChannelRows] = useState([])
+  const [salesRows, setSalesRows] = useState([])
+  const [referencesRows, setReferencesRows] = useState([])
 
   const search = () => {
     setShowResults(false)
     // Show loading animation
 
     // Do magic to get data filter by date range, result goes in setDataList
-
-    setShowResults(true)
+    getData()
 
     // Stop loading animation
     return true
   }
+
+  /* Obtenemos data resumen */
+  const getData = useCallback(() => {
+    const fieldList = ['country', 'sport', 'channel', 'sales', 'references']
+
+    DataAccess.getSummary(fieldList).then((docsData) => {
+      console.log('Data from Firebase: ')
+      console.log(docsData)
+
+      // setDataList(formData)
+      setCountryRows(docsData.country)
+      setSportsRows(docsData.sport)
+      setChannelRows(docsData.channel)
+      setSalesRows(docsData.sales)
+      setReferencesRows(docsData.references)
+      setShowResults(true)
+    }).catch((error) => {
+      showGlobalError('Error al obtener datos', error)
+    })
+  })
+
+  const getDetailData = useCallback((fieldName, fieldValue) => {
+    DataAccess.getData().then((docsData) => {
+      console.log('Data from Firebase: ')
+      console.log(docsData)
+      console.log('getData:')
+      const formData = DataAccess.fbData2tableData(docsData)
+      // dispatchData({ type: 'SET_ITEMS', items: formData });
+
+      // setPending(false)
+      console.log(formData)
+      setDataList(formData)
+      setShowResults(true)
+    }).catch((error) => {
+      showGlobalError('Error al obtener datos', error)
+    })
+  })
 
   return (
     <div>
@@ -63,7 +111,31 @@ export default function List() {
 
         <Divider />
         {showResults ? (
-          <DataTable dataRows={dataList} dataColumns={columns} />
+          <Box sx={{ flexGrow: 1 }}>
+            <div className='summarySection'>
+              <Card sx={{ minWidth: 400 }} >
+                <DataTable
+                  dataRows={countryRows} dataColumns={countryColumnsDef} />
+              </Card>
+              <Card sx={{ minWidth: 400 }} >
+                <DataTable
+                  dataRows={sportsRows} dataColumns={sportsColumnsDef} />
+              </Card>
+              <Card sx={{ minWidth: 400 }} >
+                <DataTable
+                  dataRows={channelRows} dataColumns={channelColumnsDef} />
+              </Card>
+              <Card sx={{ minWidth: 400 }} >
+                <DataTable
+                  dataRows={salesRows} dataColumns={salesColumnsDef} />
+              </Card>
+              <Card sx={{ minWidth: 400 }} >
+                <DataTable
+                  dataRows={referencesRows} dataColumns={referencesColumnsDef}
+                />
+              </Card>
+            </div>
+          </Box>
         ) : null}
       </div>
     </div>

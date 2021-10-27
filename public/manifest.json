@@ -1,11 +1,16 @@
 {
-  "short_name": "CRUD App",
-  "name": "CRUD React App",
+  "short_name": "forbex-contact",
+  "name": "Forbex - Registro de consultas",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "icon.icns",
+      "sizes": "256x256",
+      "type": "image/icns"
     },
     {
       "src": "logo192.png",

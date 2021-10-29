@@ -27,6 +27,7 @@ export default function List() {
   // [null, null]
   // const [dataList, setDataList] = useState(mockData)
   // const [countryColumns, setCountryColumns] = useState(countryColumnsDef)
+  const [resultLength, setResultLength] = useState(null)
   const [showResults, setShowResults] = useState(false)
   const [countryRows, setCountryRows] = useState([])
   const [sportsRows, setSportsRows] = useState([])
@@ -39,27 +40,31 @@ export default function List() {
     // Show loading animation
 
     // Do magic to get data filter by date range, result goes in setDataList
-    getData()
+    getData(dateFilter)
 
     // Stop loading animation
     return true
   }
 
   /* Obtenemos data resumen */
-  const getData = useCallback(() => {
+  const getData = useCallback((dateRange) => {
     const fieldList = ['country', 'sport', 'channel', 'sales', 'references']
 
-    DataAccess.getSummary(fieldList)
-      .then((docsData) => {
+    console.log('getData - dateRange')
+    console.log(dateRange)
+    DataAccess.getSummary(fieldList, dateRange)
+      .then(({size, data}) => {
         console.log('Data from Firebase: ')
-        console.log(docsData)
+        console.log(size)
+        console.log(data)
 
         // setDataList(formData)
-        setCountryRows(docsData.country)
-        setSportsRows(docsData.sport)
-        setChannelRows(docsData.channel)
-        setSalesRows(docsData.sales)
-        setReferencesRows(docsData.references)
+        setResultLength(size)
+        setCountryRows(data.country)
+        setSportsRows(data.sport)
+        setChannelRows(data.channel)
+        setSalesRows(data.sales)
+        setReferencesRows(data.references)
         setShowResults(true)
       })
       .catch((error) => {
@@ -117,6 +122,7 @@ export default function List() {
         <Divider />
         {showResults ? (
           <Box sx={{ flexGrow: 1 }}>
+            <div>Resultados de la búsqueda: {resultLength}</div>
             <div className="summarySection">
               <Card sx={{ minWidth: 400 }}>
                 <DataTable

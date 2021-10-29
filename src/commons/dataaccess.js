@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-multi-str */
-import firebase from './forbex/firebase-config'
+import firebaseApp from './forbex/firebase-config'
+import firebase from 'firebase/app'
 import { getOptionObjectFor } from '../assets/wkis'
 
 // export const analytics = firebase.analytics()
 
-export const db = firebase.firestore()
+export const db = firebaseApp.firestore()
 
 const queryOptions = {
   cache: true,
@@ -145,29 +146,46 @@ export const DataAccess = {
         return Promise.reject(error)
       })
   },
-  getSummary: async (fieldList) => {
+  getSummary: async (fieldList, dateRange) => {
     if (!fieldList) {
       return Promise.reject(new Error('El parámetro fieldList está vacío'))
     }
-    const resultMap = []
+    const resultMap = {}
     // Init result map
     fieldList.forEach((item) => {
       resultMap[item] = []
     })
 
-    const queryRef = db
+    let queryRef = db
       .collection(FirebaseInfo.contactsCollectionName)
-      .orderBy(fieldList[0], 'asc')
+      .orderBy('date', 'desc')
 
-    return queryRef // .select(fieldList)
+    if (dateRange && dateRange.length > 0) {
+      console.log('dateRange filter')
+      console.log(dateRange)
+      // Tomar rango de fechas para armar filtro
+      // const start = new Date(dateRange[0]);
+      // const end = new Date(dateRange[1]);
+      const start = firebase.firestore.Timestamp.fromDate(
+        dateRange[0]);
+      const end = firebase.firestore.Timestamp.fromDate(
+        dateRange[1]);
+      queryRef = queryRef.where('date', '>=', start)
+      queryRef = queryRef.where('date', '<=', end)
+      console.log(start)
+      console.log(end)
+    }
+
+    return queryRef
       .get()
       .then((querySnapshot) => {
+        const resultSize = querySnapshot.size
         querySnapshot.forEach((doc) => {
           consolidate(doc.data(), resultMap, fieldList)
         })
         console.log('getSummary result:')
         console.log(resultMap)
-        return Promise.resolve(resultMap)
+        return Promise.resolve({size: resultSize, data: resultMap})
       })
       .catch((error) => {
         console.log('Error getData from firebase')

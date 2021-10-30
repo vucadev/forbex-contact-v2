@@ -22,7 +22,7 @@ import { showGlobalError } from '../commons/global-utils'
  *
  * @return {Object} Component for Listing entities
  */
-export default function List() {
+export default function Summary() {
   const [dateFilter, setDateFilter] = useState([new Date(), new Date()])
   // [null, null]
   // const [dataList, setDataList] = useState(mockData)

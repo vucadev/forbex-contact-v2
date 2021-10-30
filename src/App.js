@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import './App.css'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import List from './components/List'
+import Summary from './components/Summary'
 import New from './components/New'
 import NavBar from './components/NavBar'
 import { Container } from '@mui/material'
@@ -51,7 +51,7 @@ function App() {
               <New />
             </Route>
             <Route exact path="/">
-              <List />
+              <Summary />
             </Route>
           </Switch>
         </Container>

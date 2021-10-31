@@ -8,12 +8,29 @@ import { getOptionObjectFor } from '../assets/wkis'
 
 export const db = firebaseApp.firestore()
 
+// Uncomment to debug firestore:
+// firebase.firestore.setLogLevel('debug')
+
 const queryOptions = {
   cache: true,
 }
 
 export const FirebaseInfo = {
   contactsCollectionName: 'contact-items',
+}
+
+/**
+ * Función que agrega filtro de fechas a una query Firestore
+ * @param {Object} queryRef Referencia de la query actual
+ * @param {Date} start Fecha inicial del filtro
+ * @param {Date} end Fecha final del filtro
+ * @return {Object} queryRef Referencia de la query modificada
+ */
+const dateFilterAdd = (queryRef, start, end) => {
+  queryRef = queryRef
+    .where('date', '>=', start)
+    .where('date', '<=', end)
+  return queryRef
 }
 
 /**
@@ -104,13 +121,17 @@ export const DataAccess = {
       .get(queryOptions)
       .then((querySnapshot) => {
         let max_contact_number = 0
+        let max_contact_number_date = new Date()
         if (!querySnapshot.empty) {
           max_contact_number = querySnapshot.docs[0].data().contact_number
+          max_contact_number_date = querySnapshot.docs[0].data().date.toDate()
         }
         FirebaseInfo.lastContactNumber = max_contact_number
 
         console.log(`Last contact number: ${max_contact_number}`)
-        return Promise.resolve(max_contact_number)
+        console.log(`Date: ${max_contact_number_date}`)
+        return Promise.resolve({count: max_contact_number,
+          date: max_contact_number_date})
       })
       .catch((error) => {
         console.log('Error getData from firebase')
@@ -170,8 +191,7 @@ export const DataAccess = {
         dateRange[0]);
       const end = firebase.firestore.Timestamp.fromDate(
         dateRange[1]);
-      queryRef = queryRef.where('date', '>=', start)
-      queryRef = queryRef.where('date', '<=', end)
+      queryRef = dateFilterAdd(queryRef, start, end)
       console.log(start)
       console.log(end)
     }
@@ -193,17 +213,36 @@ export const DataAccess = {
         return Promise.reject(error)
       })
   },
-  getData: async () => {
-    return db
-      .collection(FirebaseInfo.contactsCollectionName)
+  getData: async (filters, since, upto) => {
+    let queryRef = db.collection(FirebaseInfo.contactsCollectionName)
+      .orderBy('date', 'desc')
+
+    queryRef = dateFilterAdd(queryRef, since, upto)
+
+    if (filters.length > 0) {
+      // Aplicar los filtros
+      console.log('filters: ')
+      filters.forEach((item) => {
+        const symbol = (item.comparatorSymbol || '==')
+        queryRef = queryRef
+          .where(item.field, (symbol), item.value)
+        console.log(`${item.field} ${symbol} ${item.value}`)
+      })
+    }
+    console.log('get data queryRef')
+    console.log(queryRef)
+    return queryRef
       .orderBy('contact_number', 'desc')
       .get()
       .then((querySnapshot) => {
+        const resultSize = querySnapshot.size
         const docsData = []
         querySnapshot.forEach((doc) => {
-          docsData.push(doc.data())
+          const dataItem = doc.data()
+          dataItem.id = dataItem.contact_number
+          docsData.push(dataItem)
         })
-        return Promise.resolve(docsData)
+        return Promise.resolve({size: resultSize, data: docsData})
       })
       .catch((error) => {
         console.log('Error getData from firebase')

@@ -16,17 +16,16 @@ import {
 } from '../assets/summary-columns-def'
 // import { rowsGrid as mockData } from '../assets/mockData'
 import { DataAccess } from '../commons/dataaccess'
-import { showGlobalError } from '../commons/global-utils'
+import { showGlobalError, formatDate } from '../commons/global-utils'
+import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 /**
  *
  * @return {Object} Component for Listing entities
  */
-export default function Summary() {
-  const [dateFilter, setDateFilter] = useState([new Date(), new Date()])
-  // [null, null]
-  // const [dataList, setDataList] = useState(mockData)
-  // const [countryColumns, setCountryColumns] = useState(countryColumnsDef)
+export default function Summary({ lastDate }) {
+  const [dateFilter, setDateFilter] = useState([lastDate, new Date()])
   const [resultLength, setResultLength] = useState(null)
   const [showResults, setShowResults] = useState(false)
   const [countryRows, setCountryRows] = useState([])
@@ -34,10 +33,51 @@ export default function Summary() {
   const [channelRows, setChannelRows] = useState([])
   const [salesRows, setSalesRows] = useState([])
   const [referencesRows, setReferencesRows] = useState([])
+  const history = useHistory()
+
+  Summary.propTypes = {
+    lastDate: PropTypes.instanceOf(Date).isRequired,
+  }
+
+
+  const getActionDef = (field) => {
+    return {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 130,
+      disableClickEventBubbling: true,
+      renderCell: (values) => {
+        const onClick = (e) => {
+          e.stopPropagation()
+          const start = formatDate(dateFilter[0])
+          const end = formatDate(dateFilter[1])
+          const dateRangeFilter = `since=${start}&upto=${end}`
+          history.push(`/list/${field}/${values.row.id}?${dateRangeFilter}`)
+        }
+
+        return <Button
+          onClick={onClick}
+          variant="contained"
+          color="primary"
+          size="small"
+          style={{ marginLeft: 16, lineHeight: 1 }}
+        >
+          Listar
+        </Button>
+      },
+    }
+  }
 
   const search = () => {
     setShowResults(false)
     // Show loading animation
+
+    // Agrego actions a las tablas
+    countryColumnsDef.push(getActionDef('country'))
+    channelColumnsDef.push(getActionDef('channel'))
+    salesColumnsDef.push(getActionDef('sales'))
+    referencesColumnsDef.push(getActionDef('references'))
+    sportsColumnsDef.push(getActionDef('sport'))
 
     // Do magic to get data filter by date range, result goes in setDataList
     getData(dateFilter)

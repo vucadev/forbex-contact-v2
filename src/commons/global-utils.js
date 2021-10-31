@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { getLabelFor } from '../assets/wkis'
 
 const defaultLoadingMessage = 'Aguarde un instante...'
@@ -17,6 +17,26 @@ export const showGlobalError = (message, data) => {
   }
   alert(message + dataMessage)
 }
+
+export const defaultDateStringFormat = 'dd/MM/yyyy'
+
+/**
+ * Transforma un string con formato default de la app en un Date
+ * @param {string} dateString Fecha en string con formato default de la app
+ * @return {Date} Fecha a partir del string
+ */
+export const parseDate = (dateString) => {
+  return parse(dateString, defaultDateStringFormat, new Date())
+}
+/**
+ * Transforma un Date a un String con formato default de la app
+ * @param {Date} dateObject Fecha en Date
+ * @return {string} Fecha en string formateado
+ */
+export const formatDate = (dateObject) => {
+  return format(dateObject, defaultDateStringFormat)
+}
+
 
 // export const showDialog = (message, data, yesCallback) => {
 //   const defaultMessage = '¿Está seguro?'
@@ -52,7 +72,7 @@ export const showLoading = (message, callbackProgress) => {
 export const hideLoading = (message, callbackProgress) => {}
 
 export const sendmail = (model, emailTo) => {
-  const dateString = format(new Date(model.date), 'dd/MM/yyyy')
+  const dateString = format(new Date(model.date), defaultDateStringFormat)
   const emailAddress = ''
   if (emailTo) {
     emailAddress = emailTo

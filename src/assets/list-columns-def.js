@@ -1,17 +1,25 @@
-import { format } from 'date-fns'
 import { getLabelFor } from './wkis'
+import { formatDate } from '../commons/global-utils'
 
+export const handleGetRowId = (row) => {
+  return row.contact_number
+}
+
+const smallWidth = 100
+const mediumWidth = 200
+const largeWidth = 400
 export const columnsGrid = [
   {
     headerName: 'Nro consulta',
     field: 'contact_number',
     sortable: true,
+    filterable: true,
   },
   {
     headerName: 'Fecha',
     field: 'date',
     type: 'date',
-    valueFormatter: (params) => format(params.value, 'dd/MM/yyyy'),
+    valueFormatter: (params) => formatDate(params.value.toDate()),
     sortable: true,
   },
   {
@@ -25,6 +33,7 @@ export const columnsGrid = [
     field: 'contact_name',
     sortable: true,
     editable: true,
+    width: mediumWidth,
   },
   {
     headerName: 'Deporte',
@@ -37,40 +46,45 @@ export const columnsGrid = [
     field: 'phone',
     sortable: true,
     editable: true,
+    width: mediumWidth,
   },
   {
     headerName: 'Email',
     field: 'email',
     sortable: true,
     editable: true,
+    width: mediumWidth,
   },
   {
     headerName: 'País',
     field: 'country',
     sortable: true,
+    width: smallWidth,
   },
   {
     headerName: 'Provincia',
     field: 'province',
     sortable: true,
+    width: mediumWidth,
   },
   {
     headerName: 'Localidad',
     field: 'city',
     sortable: true,
+    width: mediumWidth,
   },
   {
     headerName: 'Referencias',
     field: 'references',
     valueFormatter: (params) => getLabelFor('references', params.value),
     sortable: true,
-    width: 20,
+    width: smallWidth,
   },
   {
     headerName: 'Consulta',
     field: 'comments',
     sortable: true,
-    width: 80,
+    width: largeWidth,
     editable: true,
   },
   {
@@ -83,7 +97,8 @@ export const columnsGrid = [
     headerName: 'Feedback del cliente',
     field: 'client_feedback',
     sortable: true,
-    width: 60,
+    width: largeWidth,
     editable: true,
+    filterable: false,
   },
 ]

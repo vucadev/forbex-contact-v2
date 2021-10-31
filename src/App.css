@@ -31,7 +31,7 @@ p.totalCount {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.summarySection {
+.summarySection, .listSection {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -41,7 +41,8 @@ p.totalCount {
   vertical-align: baseline;
   justify-content: center;
 }
-.summarySection > Card {
+.summarySection > Card, 
+  .listSection > Card {
   padding: 5% 15%;
 }
 

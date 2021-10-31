@@ -12,12 +12,15 @@ const quantityFieldDef = {
   sortable: true,
 }
 
+// Action default de ejemplo
+// eslint-disable-next-line no-unused-vars
 const actionsFieldDef = {
   field: 'actions',
   headerName: 'Acciones',
   width: 130,
-  renderCell: () => (
+  renderCell: (values) => (
     <Button
+      // href={history.push(`/list/country/${values.row.id}`)}
       variant="contained"
       color="primary"
       size="small"
@@ -37,7 +40,6 @@ export const channelColumnsDef = [
     sortable: true,
   },
   quantityFieldDef,
-  actionsFieldDef,
 ]
 
 export const sportsColumnsDef = [
@@ -49,7 +51,6 @@ export const sportsColumnsDef = [
     sortable: true,
   },
   quantityFieldDef,
-  actionsFieldDef,
 ]
 
 export const countryColumnsDef = [
@@ -60,7 +61,6 @@ export const countryColumnsDef = [
     width: dataFieldWidth,
   },
   quantityFieldDef,
-  actionsFieldDef,
 ]
 
 export const referencesColumnsDef = [
@@ -73,7 +73,6 @@ export const referencesColumnsDef = [
     width: dataFieldWidth,
   },
   quantityFieldDef,
-  actionsFieldDef,
 ]
 
 export const salesColumnsDef = [
@@ -85,5 +84,4 @@ export const salesColumnsDef = [
     sortable: true,
   },
   quantityFieldDef,
-  actionsFieldDef,
 ]

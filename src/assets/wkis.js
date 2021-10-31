@@ -54,6 +54,15 @@ const listsMap = {
   sales: salesNamesList,
 }
 
+// Pasar a un archivo de i18n
+const fieldNames = {
+  country: 'País',
+  sport: 'Deporte',
+  channel: 'Canal origen',
+  sales: 'Vendedor',
+  references: 'Referencias',
+}
+
 export const getOptionObjectFor = (field, value) => {
   return listsMap[field].find((x) => x.value === value)
 }
@@ -64,8 +73,22 @@ export const getLabelFor = (field, value) => {
     label = getOptionObjectFor(field, value).label
   } catch (error) {
     console.error(error)
-    console.error(`Field ${field} - Value: ${value}`)
+    console.error(`Field ${field} - Value: `)
+    console.error(value)
     console.error(listsMap[field])
+  }
+
+  return label
+}
+
+export const getLabelForFilter = (field) => {
+  let label = ''
+  try {
+    label = fieldNames[field]
+  } catch (error) {
+    console.error(error)
+    console.error(`Field ${field}`)
+    console.error(fieldNames[field])
   }
 
   return label

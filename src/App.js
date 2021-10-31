@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Summary from './components/Summary'
 import New from './components/New'
 import NavBar from './components/NavBar'
+import List from './components/List'
 import { Container } from '@mui/material'
 import { DataAccess } from './commons/dataaccess'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,6 +24,8 @@ import {
  */
 function App() {
   const [contactsCount, setContactsCount] = useState(-1)
+  const [lastDate, setLastDate] = useState(null)
+  const [showSummary, setShowSummary] = useState(false)
 
   useEffect(() => {
     getCountData()
@@ -30,9 +33,12 @@ function App() {
 
   const getCountData = useCallback(() => {
     DataAccess.getCountData()
-      .then((count) => {
+      .then(({count, date}) => {
         console.log('Contacts count:' + count)
+        console.log('Contacts last date:' + date)
         setContactsCount(count)
+        setLastDate(date)
+        setShowSummary(true)
       })
       .catch((error) => {
         showGlobalError('Error al obtener datos', error)
@@ -50,8 +56,11 @@ function App() {
             <Route path="/new">
               <New />
             </Route>
+            <Route path="/list/:filterField/:filterValue">
+              <List />
+            </Route>
             <Route exact path="/">
-              <Summary />
+              { showSummary ? <Summary lastDate={lastDate} /> : null}
             </Route>
           </Switch>
         </Container>

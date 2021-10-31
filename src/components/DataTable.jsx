@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, createRef, useEffect } from 'react'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 /**
  * @param {Object} dataRows Data to show in component
  * @param {Object} dataColumns Columnlist to configure Component
@@ -11,6 +11,8 @@ export default function Data({
   dataColumns,
   customPageSize,
   checkboxSeelectRow,
+  showFilters,
+  getRowId,
 }) {
   // eslint-disable-next-line no-unused-vars
   const [rows, setRows] = useState(dataRows)
@@ -19,6 +21,7 @@ export default function Data({
   const tableRef = createRef()
   const [pageSize, setPageSize] = useState(5)
   const [canSelectRow] = useState(checkboxSeelectRow || false)
+  const components = ( showFilters ? { Toolbar: GridToolbar } : null)
 
   useEffect(() => {
     if (customPageSize) {
@@ -49,6 +52,7 @@ export default function Data({
             rowsPerPageOptions={[5, 10, 50]}
             {...(canSelectRow ? checkboxSelection : null)}
             density={'compact'}
+            components={components}
           />
         </div>
       </div>

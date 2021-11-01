@@ -5,7 +5,7 @@ import DateRangePicker from '@mui/lab/DateRangePicker'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import Box from '@mui/material/Box'
-import { Button, Card, Divider } from '@mui/material'
+import { Button, Card, Collapse, Divider } from '@mui/material'
 import DataTable from './DataTable'
 import {
   countryColumnsDef,
@@ -22,6 +22,7 @@ import PropTypes from 'prop-types'
 
 /**
  *
+ * @param {Date} lastDate Ultima fecha en sistema
  * @return {Object} Component for Listing entities
  */
 export default function Summary({ lastDate }) {
@@ -34,11 +35,15 @@ export default function Summary({ lastDate }) {
   const [salesRows, setSalesRows] = useState([])
   const [referencesRows, setReferencesRows] = useState([])
   const history = useHistory()
+  const [hidden, setHidden] = useState([false])
 
   Summary.propTypes = {
     lastDate: PropTypes.instanceOf(Date).isRequired,
   }
 
+  const hideSummary = () => {
+    setHidden(true)
+  }
 
   const getActionDef = (field) => {
     return {
@@ -52,6 +57,7 @@ export default function Summary({ lastDate }) {
           const start = formatDate(dateFilter[0])
           const end = formatDate(dateFilter[1])
           const dateRangeFilter = `since=${start}&upto=${end}`
+          hideSummary()
           history.push(`/list/${field}/${values.row.id}?${dateRangeFilter}`)
         }
 
@@ -133,68 +139,71 @@ export default function Summary({ lastDate }) {
 
   return (
     <div>
-      <div className="filters">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateRangePicker
-            disableFuture
-            inputFormat="dd/MM/yyyy"
-            startText="Fecha desde"
-            endText="Fecha hasta"
-            value={dateFilter}
-            onChange={(newValue) => {
-              setDateFilter(newValue)
-            }}
-            renderInput={(startProps, endProps) => (
-              <Fragment>
-                <TextField {...startProps} />
-                <Box sx={{ mx: 2 }}> a </Box>
-                <TextField {...endProps} />
-                <div className="searchButtonDiv">
-                  <Button variant="contained" onClick={search}>
-                    Buscar
-                  </Button>
-                </div>
-              </Fragment>
-            )}
-          />
-        </LocalizationProvider>
+      <Collapse in={hidden} timeout="auto">
+        <div className="filters">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateRangePicker
+              disableFuture
+              inputFormat="dd/MM/yyyy"
+              startText="Fecha desde"
+              endText="Fecha hasta"
+              value={dateFilter}
+              onChange={(newValue) => {
+                setDateFilter(newValue)
+              }}
+              renderInput={(startProps, endProps) => (
+                <Fragment>
+                  <TextField {...startProps} />
+                  <Box sx={{ mx: 2 }}> a </Box>
+                  <TextField {...endProps} />
+                  <div className="searchButtonDiv">
+                    <Button variant="contained" onClick={search}>
+                      Buscar
+                    </Button>
+                  </div>
+                </Fragment>
+              )}
+            />
+          </LocalizationProvider>
 
-        <Divider />
-        {showResults ? (
-          <Box sx={{ flexGrow: 1 }}>
-            <div>Resultados de la búsqueda: {resultLength}</div>
-            <div className="summarySection">
-              <Card sx={{ minWidth: 400 }}>
-                <DataTable
-                  dataRows={countryRows}
-                  dataColumns={countryColumnsDef}
-                />
-              </Card>
-              <Card sx={{ minWidth: 400 }}>
-                <DataTable
-                  dataRows={sportsRows}
-                  dataColumns={sportsColumnsDef}
-                />
-              </Card>
-              <Card sx={{ minWidth: 400 }}>
-                <DataTable
-                  dataRows={channelRows}
-                  dataColumns={channelColumnsDef}
-                />
-              </Card>
-              <Card sx={{ minWidth: 400 }}>
-                <DataTable dataRows={salesRows} dataColumns={salesColumnsDef} />
-              </Card>
-              <Card sx={{ minWidth: 400 }}>
-                <DataTable
-                  dataRows={referencesRows}
-                  dataColumns={referencesColumnsDef}
-                />
-              </Card>
-            </div>
-          </Box>
-        ) : null}
-      </div>
+          <Divider />
+          {showResults ? (
+            <Box sx={{ flexGrow: 1 }}>
+              <div>Resultados de la búsqueda: {resultLength}</div>
+              <div className="summarySection">
+                <Card sx={{ minWidth: 400 }}>
+                  <DataTable
+                    dataRows={countryRows}
+                    dataColumns={countryColumnsDef}
+                  />
+                </Card>
+                <Card sx={{ minWidth: 400 }}>
+                  <DataTable
+                    dataRows={sportsRows}
+                    dataColumns={sportsColumnsDef}
+                  />
+                </Card>
+                <Card sx={{ minWidth: 400 }}>
+                  <DataTable
+                    dataRows={channelRows}
+                    dataColumns={channelColumnsDef}
+                  />
+                </Card>
+                <Card sx={{ minWidth: 400 }}>
+                  <DataTable dataRows={salesRows}
+                    dataColumns={salesColumnsDef} />
+                </Card>
+                <Card sx={{ minWidth: 400 }}>
+                  <DataTable
+                    dataRows={referencesRows}
+                    dataColumns={referencesColumnsDef}
+                  />
+                </Card>
+              </div>
+            </Box>
+          ) : null}
+        </div>
+      </Collapse>
     </div>
   )
 }

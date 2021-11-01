@@ -59,10 +59,11 @@ function App() {
             <Route path="/list/:filterField/:filterValue">
               <List />
             </Route>
-            <Route exact path="/">
-              { showSummary ? <Summary lastDate={lastDate} /> : null}
-            </Route>
           </Switch>
+          <Route path="/" >
+            { showSummary ? <Summary lastDate={lastDate} /> : null
+            }
+          </Route>
         </Container>
       </div>
     </Router>

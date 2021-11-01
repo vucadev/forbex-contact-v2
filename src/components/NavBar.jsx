@@ -2,16 +2,20 @@
 import AddIcon from '@mui/icons-material/Add'
 import HomeIcon from '@mui/icons-material/Home'
 import TableViewIcon from '@mui/icons-material/TableView'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { AppBar, Toolbar, Button, ButtonGroup } from '@mui/material'
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
 import { Box } from '@mui/system'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Logo from '../assets/images/forbex-logo-color.svg'
+
 /**
  * @param {Number} count Cantidad total de datos
  * @return {Object} Component for Creating an entity
  */
 export default function NavBar({ count }) {
+  const history = useHistory()
+
   return (
     <div>
       <Box sx={{ flexGrow: 1, height: '12vh' }}>
@@ -24,6 +28,10 @@ export default function NavBar({ count }) {
               variant="contained"
               aria-label="outlined primary button group"
             >
+              { history.length > 1 ?
+                <Button onClick={history.goBack}>
+                  <ArrowBackIosNewIcon /> Volver
+                </Button> : null }
               <Button variant="contained" component={Link} to="/">
                 <HomeIcon /> Inicio
               </Button>

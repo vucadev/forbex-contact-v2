@@ -396,7 +396,7 @@ export const DataAccess = {
     if (!model.phone && !model.email) {
       inValiFields.push('Email ó Teléfono')
     }
-    if (!model.references) {
+    if (!model.references && model.references != '') {
       inValiFields.push('Cómo nos conoció')
     }
     return inValiFields

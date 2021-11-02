@@ -139,71 +139,71 @@ export default function Summary({ lastDate }) {
 
   return (
     <div>
-      <Collapse in={hidden} timeout="auto">
-        <div className="filters">
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateRangePicker
-              disableFuture
-              inputFormat="dd/MM/yyyy"
-              startText="Fecha desde"
-              endText="Fecha hasta"
-              value={dateFilter}
-              onChange={(newValue) => {
-                setDateFilter(newValue)
-              }}
-              renderInput={(startProps, endProps) => (
-                <Fragment>
-                  <TextField {...startProps} />
-                  <Box sx={{ mx: 2 }}> a </Box>
-                  <TextField {...endProps} />
-                  <div className="searchButtonDiv">
-                    <Button variant="contained" onClick={search}>
-                      Buscar
-                    </Button>
-                  </div>
-                </Fragment>
-              )}
-            />
-          </LocalizationProvider>
+      {/* <Collapse in={hidden} timeout="auto"> */}
+      <div className="filters">
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DateRangePicker
+            disableFuture
+            inputFormat="dd/MM/yyyy"
+            startText="Fecha desde"
+            endText="Fecha hasta"
+            value={dateFilter}
+            onChange={(newValue) => {
+              setDateFilter(newValue)
+            }}
+            renderInput={(startProps, endProps) => (
+              <Fragment>
+                <TextField {...startProps} />
+                <Box sx={{ mx: 2 }}> a </Box>
+                <TextField {...endProps} />
+                <div className="searchButtonDiv">
+                  <Button variant="contained" onClick={search}>
+                    Buscar
+                  </Button>
+                </div>
+              </Fragment>
+            )}
+          />
+        </LocalizationProvider>
 
-          <Divider />
-          {showResults ? (
-            <Box sx={{ flexGrow: 1 }}>
-              <div>Resultados de la búsqueda: {resultLength}</div>
-              <div className="summarySection">
-                <Card sx={{ minWidth: 400 }}>
-                  <DataTable
-                    dataRows={countryRows}
-                    dataColumns={countryColumnsDef}
-                  />
-                </Card>
-                <Card sx={{ minWidth: 400 }}>
-                  <DataTable
-                    dataRows={sportsRows}
-                    dataColumns={sportsColumnsDef}
-                  />
-                </Card>
-                <Card sx={{ minWidth: 400 }}>
-                  <DataTable
-                    dataRows={channelRows}
-                    dataColumns={channelColumnsDef}
-                  />
-                </Card>
-                <Card sx={{ minWidth: 400 }}>
-                  <DataTable dataRows={salesRows}
-                    dataColumns={salesColumnsDef} />
-                </Card>
-                <Card sx={{ minWidth: 400 }}>
-                  <DataTable
-                    dataRows={referencesRows}
-                    dataColumns={referencesColumnsDef}
-                  />
-                </Card>
-              </div>
-            </Box>
-          ) : null}
-        </div>
-      </Collapse>
+        <Divider />
+        {showResults ? (
+          <Box sx={{ flexGrow: 1 }}>
+            <div>Resultados de la búsqueda: {resultLength}</div>
+            <div className="summarySection">
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable
+                  dataRows={countryRows}
+                  dataColumns={countryColumnsDef}
+                />
+              </Card>
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable
+                  dataRows={sportsRows}
+                  dataColumns={sportsColumnsDef}
+                />
+              </Card>
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable
+                  dataRows={channelRows}
+                  dataColumns={channelColumnsDef}
+                />
+              </Card>
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable dataRows={salesRows}
+                  dataColumns={salesColumnsDef} />
+              </Card>
+              <Card sx={{ minWidth: 400 }}>
+                <DataTable
+                  dataRows={referencesRows}
+                  dataColumns={referencesColumnsDef}
+                />
+              </Card>
+            </div>
+          </Box>
+        ) : null}
+      </div>
+      {/* </Collapse> */}
     </div>
   )
 }

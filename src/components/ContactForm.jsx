@@ -4,18 +4,34 @@ import PropTypes from 'prop-types'
 import { useForm } from 'react-hook-form'
 import { DatePickerComponent } from './DatePickerComponent'
 import { SelectFieldComponent } from './SelectFieldComponent'
-import { showGlobalError, showLoading } from '../commons/global-utils'
+import { sendmail, showGlobalError, showLoading } from '../commons/global-utils'
 import { TextFieldComponent } from './TextFieldComponent'
 import { channelNamesList, referencesNamesList, sportsNamesList,
   salesNamesList } from '../assets/wkis';
 import { useState } from 'react'
-import { DataAccess } from '../commons/dataaccess'
+import { DataAccess, analytics } from '../commons/dataaccess'
+import { CheckboxFieldComponent } from './CheckboxFieldComponent'
+import { useHistory } from 'react-router'
 
-const defaultProvince = 'Buenos Aires'
-const defaultCountry = 'Argentina'
+const emptyFormValues = {
+  date: new Date(),
+  province: 'Buenos Aires',
+  country: 'Argentina',
+  contact_number: null,
+  channel: null,
+  contact_name: null,
+  phone: null,
+  email: null,
+  sport: null,
+  city: null,
+  references: null,
+  comments: null,
+  client_feedback: null,
+  sendmail: null,
+}
 /**
  * Formulario para creación/modificación de una consulta
- * @param {Object} model Datos para editar
+ * @param {Object} modelEdit Datos para editar
  * @return {Object} ContactForm el formulario de consulta para completar
 */
 export const ContactForm = ({ model = {}}) => {
@@ -29,6 +45,7 @@ export const ContactForm = ({ model = {}}) => {
   // eslint-disable-next-line no-unused-vars
   const { control, handleSubmit, formState, errors } =
     useForm({defaultValues: model})
+  const history = useHistory()
 
   const handle = (model) => {
     console.log('About to submit')
@@ -48,8 +65,65 @@ export const ContactForm = ({ model = {}}) => {
       return
     }
     showLoading()
-    //   // onSubmit(model, model.sendmail)
-    // }
+    const sendmail = model.sendmail
+    // showGlobalError('Datos para guardar: ', model)
+    try {
+      // Persistencia de datos:
+      const fbModel = DataAccess.formData2fbData(model)
+      doSubmit(fbModel, sendmail)
+      resetForm()
+    } catch (error) {
+      showGlobalError('Revisá el formulario, puede que falten datos. ', error)
+      return false
+    }
+  }
+
+  const doSubmit = (fbModel, mustSendMail) => {
+    showLoading()
+    console.log('App.onSubmit');
+    const createRecord = (!fbModel.contact_number)
+    console.log(`model.contact_number ${fbModel.contact_number}`);
+    console.log(fbModel);
+    console.log('mustSendMail');
+    console.log(mustSendMail);
+    DataAccess.putData(fbModel)
+      .then(() => {
+        // if (createRecord) {
+        //   dispatchEvent('RECORD_CREATED', fbModel)
+        // } else {
+        //   dispatchEvent('RECORD_UPDATED', fbModel)
+        // }
+      })
+      .catch((error) => {
+        showGlobalError('Ocurrió un error al guardar datos', error)
+        return false
+      })
+    if (mustSendMail) {
+      sendmail(fbModel)
+      if (createRecord) {
+        analytics.logEvent('sent_mail_created_item')
+      } else {
+        analytics.logEvent('sent_mail_updated_item')
+      }
+    } else {
+      console.log('No se enviará mail')
+    }
+
+    hideLoading()
+    return true
+  }
+
+  const resetForm = () => {
+    // limpiar formulario
+    const values = {
+      ...emptyFormValues,
+      channel: 'web',
+      references: '',
+      sport: 'futbol',
+      sales: '',
+    }
+    sendmail(values)
+    // history.push('/')
   }
 
   return (
@@ -115,7 +189,7 @@ export const ContactForm = ({ model = {}}) => {
                 placeholder={'País'}
                 requiredField={true}
                 label={'País'}
-                defaultValue={defaultCountry}
+                defaultValue={emptyFormValues.country}
                 inputProps={{style: {textTransform: 'capitalize'}}} />
             </Grid>
             <Grid item>
@@ -123,7 +197,7 @@ export const ContactForm = ({ model = {}}) => {
                 control={control}
                 name={'province'}
                 label={'Provincia'}
-                defaultValue={defaultProvince}
+                defaultValue={emptyFormValues.province}
                 inputProps={{style: {textTransform: 'capitalize'}}} />
             </Grid>
             <Grid item>
@@ -172,13 +246,30 @@ export const ContactForm = ({ model = {}}) => {
             </Grid>
           </Grid>
           <Divider />
-          <div className={'actions'}>
+          <Grid item container className={'actions'}
+            direction={'row'} >
+            <Grid item>
+
+              <CheckboxFieldComponent
+                name="sendmail"
+                control={control}
+                defaultValue={!model.contact_number}
+                label="Enviar mail"
+                value={true}
+              />
+            </Grid>
             <Grid item>
               <Button type='submit' variant='contained' color='primary'>
                         Guardar
               </Button>
             </Grid>
-          </div>
+            <Grid item>
+              <Button variant='contained' color='secondary'
+                onClick={resetForm}>
+                        Limpiar valores
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
 
       </form>

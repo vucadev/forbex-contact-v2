@@ -13,7 +13,11 @@ export const logError = (error, errorInfo) => {
 export const showGlobalError = (message, data) => {
   let dataMessage = ''
   if (data) {
-    dataMessage = '' + data
+    if (typeof data === 'object') {
+      dataMessage = JSON.stringify(data, null, 2)
+    } else {
+      dataMessage = data
+    }
   }
   alert(message + dataMessage)
 }

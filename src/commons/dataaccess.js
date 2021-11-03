@@ -4,9 +4,9 @@ import firebaseApp from './forbex/firebase-config'
 import firebase from 'firebase/app'
 import { getOptionObjectFor } from '../assets/wkis'
 
-// export const analytics = firebase.analytics()
-
 export const db = firebaseApp.firestore()
+
+export const analytics = firebase.analytics()
 
 // Uncomment to debug firestore:
 // firebase.firestore.setLogLevel('debug')
@@ -16,7 +16,7 @@ const queryOptions = {
 }
 
 export const FirebaseInfo = {
-  contactsCollectionName: 'contact-items',
+  contactsCollectionName: 'contacts',
 }
 
 /**

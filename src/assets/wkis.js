@@ -28,6 +28,8 @@ export const sportsNamesList = [
   { value: 'residencial', label: 'Residencial' },
   { value: 'gym', label: 'Gimnasio' },
   { value: 'basket', label: 'Básquet' },
+  { value: 'tenis', label: 'Tenis' },
+  { value: 'golf', label: 'Golf' },
 ]
 
 export const referencesNamesList = [

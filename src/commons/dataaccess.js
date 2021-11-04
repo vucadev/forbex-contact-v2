@@ -16,7 +16,7 @@ const queryOptions = {
 }
 
 export const FirebaseInfo = {
-  contactsCollectionName: 'contacts',
+  contactsCollectionName: 'contact-items',
 }
 
 /**

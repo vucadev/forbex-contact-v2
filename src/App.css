@@ -51,3 +51,37 @@ p.totalCount {
   min-width: 40vw;
   width: 50vw;
 }
+
+/* Contact form styles */
+.contact-form {
+  padding: 2.5em 1.5em 1.5em 1.5em;
+}
+.contact-form .fields {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.contact-form .fields input {
+  /* Agregar espacio entre componentes */
+}
+
+.contact-form .actions {
+}
+
+input[name='contact_name'], input[name='email'] {
+  width: 15em;
+}
+
+.longtext-fields {
+  width: 100%;
+}
+
+textarea[name='comments'], textarea[name='client_feedback'] {
+  width: 70em;
+  min-width: 30em;
+}
+
+.contact-form .fields .MuiSelect-select {
+  width: 15em;
+}

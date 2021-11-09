@@ -7,6 +7,7 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
 import { Box } from '@mui/system'
 import { Link } from 'react-router-dom'
 import Logo from '../assets/images/forbex-logo-color.svg'
+import { useState } from 'react'
 
 /**
  * @param {Number} count Cantidad total de datos
@@ -14,6 +15,7 @@ import Logo from '../assets/images/forbex-logo-color.svg'
  */
 export default function NavBar({ count }) {
   // const history = useHistory()
+  const hideListButton = useState(false)
 
   return (
     <div>
@@ -25,15 +27,17 @@ export default function NavBar({ count }) {
           <Toolbar>
             <ButtonGroup
               aria-label="outlined primary button group" >
-              <Button variant="contained" component={Link} to="/">
-                <HomeIcon /> Inicio
-              </Button>
-              <Button variant="contained" component={Link} to="/list ">
-                <TableViewIcon /> Listado
-              </Button>
-              <Button variant="contained" component={Link} to="/new">
-                <AddIcon /> Nueva
-              </Button>
+              { !hideListButton ? <div>
+                <Button variant="contained" component={Link} to="/">
+                  <HomeIcon /> Inicio
+                </Button>
+                <Button variant="contained" component={Link} to="/list">
+                  <TableViewIcon /> Listado
+                </Button>
+                <Button variant="contained" component={Link} to="/new">
+                  <AddIcon /> Nueva
+                </Button>
+              </div> : null }
               <p className="totalCount">
                 Total de consultas:{' '}
                 {count != -1 ? count : <HourglassEmptyIcon fontSize="small" />}

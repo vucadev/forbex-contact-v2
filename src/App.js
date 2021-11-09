@@ -19,12 +19,13 @@ import {
 // analytics.logEvent('app_initialized')
 
 /**
- * CRUD example App with React.
+ * CRUD App.
  * @return {Object} The main component.
  */
 function App() {
   const [contactsCount, setContactsCount] = useState(-1)
   const [lastDate, setLastDate] = useState(null)
+  const [firstDate, setFirstDate] = useState(null)
   const [showSummary, setShowSummary] = useState(false)
 
   useEffect(() => {
@@ -33,11 +34,13 @@ function App() {
 
   const getCountData = useCallback(() => {
     DataAccess.getCountData()
-      .then(({count, date}) => {
+      .then(({ lastDate, count }) => {
         console.log('Contacts count:' + count)
-        console.log('Contacts last date:' + date)
+        console.log('Contacts last date:' + lastDate)
         setContactsCount(count)
-        setLastDate(date)
+        setLastDate(lastDate)
+        // Cambiar por (firstDate)
+        setFirstDate(lastDate)
         setShowSummary(true)
       })
       .catch((error) => {
@@ -61,7 +64,8 @@ function App() {
             </Route>
           </Switch>
           <Route path="/" >
-            { showSummary ? <Summary lastDate={lastDate} /> : null
+            { showSummary ? <Summary firstDate={ firstDate }
+              lastDate={ lastDate } /> : null
             }
           </Route>
         </Container>

@@ -130,8 +130,8 @@ export const DataAccess = {
 
         console.log(`Last contact number: ${max_contact_number}`)
         console.log(`Date: ${max_contact_number_date}`)
-        return Promise.resolve({count: max_contact_number,
-          date: max_contact_number_date})
+        return Promise.resolve({ lastDate: max_contact_number_date,
+          count: max_contact_number })
       })
       .catch((error) => {
         console.log('Error getData from firebase')
@@ -145,7 +145,7 @@ export const DataAccess = {
       `resetCountData - FirebaseInfo.lastContactNumber: \
         ${FirebaseInfo.lastContactNumber}`,
     )
-    return FirebaseUtils.getCountData()
+    return DataAccess.getCountData()
   },
   getDataTotals: async () => {
     const queryRef = db
@@ -219,14 +219,18 @@ export const DataAccess = {
 
     queryRef = dateFilterAdd(queryRef, since, upto)
 
+    console.log('filters: ')
+    console.log(filters)
+
     if (filters.length > 0) {
       // Aplicar los filtros
-      console.log('filters: ')
       filters.forEach((item) => {
-        const symbol = (item.comparatorSymbol || '==')
-        queryRef = queryRef
-          .where(item.field, (symbol), item.value)
-        console.log(`${item.field} ${symbol} ${item.value}`)
+        if (item.field !== null && item.value !== null) {
+          const symbol = (item.comparatorSymbol || '==')
+          queryRef = queryRef
+            .where(item.field, (symbol), item.value)
+          console.log(`${item.field} ${symbol} ${item.value}`)
+        }
       })
     }
     console.log('get data queryRef')

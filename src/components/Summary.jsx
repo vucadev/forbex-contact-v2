@@ -25,10 +25,12 @@ import PropTypes from 'prop-types'
  * @param {Date} lastDate Ultima fecha en sistema
  * @return {Object} Component for Listing entities
  */
-export default function Summary({ lastDate }) {
-  const [dateFilter, setDateFilter] = useState([lastDate, new Date()])
+export default function Summary({ firstDate, lastDate }) {
+  const [dateFilter, setDateFilter] = useState([firstDate,
+    lastDate ?? new Date()])
   const [resultLength, setResultLength] = useState(null)
   const [showResults, setShowResults] = useState(false)
+  const [disabledSearch, setDisabledSearch] = useState(false)
   const [countryRows, setCountryRows] = useState([])
   const [sportsRows, setSportsRows] = useState([])
   const [channelRows, setChannelRows] = useState([])
@@ -39,6 +41,7 @@ export default function Summary({ lastDate }) {
 
   Summary.propTypes = {
     lastDate: PropTypes.instanceOf(Date).isRequired,
+    firstDate: PropTypes.instanceOf(Date).isRequired,
   }
 
   const hideSummary = () => {
@@ -111,6 +114,7 @@ export default function Summary({ lastDate }) {
         setChannelRows(data.channel)
         setSalesRows(data.sales)
         setReferencesRows(data.references)
+        setDisabledSearch(true)
         setShowResults(true)
       })
       .catch((error) => {
@@ -150,6 +154,7 @@ export default function Summary({ lastDate }) {
             value={dateFilter}
             onChange={(newValue) => {
               setDateFilter(newValue)
+              setDisabledSearch(false)
             }}
             renderInput={(startProps, endProps) => (
               <Fragment>
@@ -157,7 +162,8 @@ export default function Summary({ lastDate }) {
                 <Box sx={{ mx: 2 }}> a </Box>
                 <TextField {...endProps} />
                 <div className="searchButtonDiv">
-                  <Button variant="contained" onClick={search}>
+                  <Button variant="contained" onClick={search}
+                    disabled={ disabledSearch }>
                     Buscar
                   </Button>
                 </div>

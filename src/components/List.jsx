@@ -40,9 +40,15 @@ export default function List() {
   /* Obtenemos data list */
   const getData = () => {
     const filter = {field: filterField, value: filterValue}
+
+    const since = parseDate(query.get('since') || '01/10/2021')
+    const upto = ( query.get('upto') ?
+      parseDate(query.get('upto')) :
+      new Date() )
+
     DataAccess.getData([filter],
-      parseDate(query.get('since')),
-      parseDate(query.get('upto')))
+      since,
+      upto)
       .then(({size, data}) => {
         console.log('List - Data from Firebase: ')
         console.log(size)
